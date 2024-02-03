@@ -2,7 +2,7 @@
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 
 // named export
-import {cart, removeFromCart} from '../data/cart.js';
+import {cart, removeFromCart, updateDeliveryOption} from '../data/cart.js';
 import { findProductByProductId } from '../data/products.js';
 import formatCurrency from './utils/money.js';
 import deliveryOptions from '../data/deliveryOptions.js';
@@ -25,8 +25,8 @@ cart.forEach((cartItem) => {
   const matchingProduct = findProductByProductId(productId);
 
   cartSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
-  <div class="delivery-date">
-    Delivery date: ${getChoosenDeliveryDateString(cartItem)}
+  <div class="js-delivery-date-${matchingProduct.id} delivery-date">
+    Delivery date: ${getChoosenDeliveryDateString(cartItem.deliveryOptionId)}
   </div>
 
   <div class="cart-item-details-grid">
@@ -63,8 +63,7 @@ cart.forEach((cartItem) => {
 </div>`;
 });
 
-function getChoosenDeliveryDateString(cartItem) {
-  const deliveryOptionId = cartItem.deliveryOptionId;
+function getChoosenDeliveryDateString(deliveryOptionId) {
   let choosenDeliveryOption;
 
   deliveryOptions.forEach(option => {
@@ -91,7 +90,9 @@ function generateDeliveryOptionsHTML(matchingProduct, cartItem) {
 
     const isChecked = option.id === cartItem.deliveryOptionId;
 
-    optionsHTML += `      <div class="delivery-option">
+    optionsHTML += `      <div class="js-delivery-option delivery-option"
+      data-product-id="${matchingProduct.id}"
+      data-delivery-option-id="${option.id}">
     <input type="radio"
       ${isChecked ? 'checked' : ''}
       class="delivery-option-input"
@@ -119,6 +120,16 @@ document.querySelectorAll('.js-delete-link').forEach(link => {
     const itemContainer = document.querySelector(`.js-cart-item-container-${productId}`);
     console.log(itemContainer);
     itemContainer.remove();
+  })
+})
+
+document.querySelectorAll('.js-delivery-option').forEach(option => {
+  option.addEventListener('click', () => {
+    const {productId, deliveryOptionId} = option.dataset;
+    
+    updateDeliveryOption(productId, deliveryOptionId);
+
+    document.querySelector(`.js-delivery-date-${productId}`).innerHTML = `Delivery date: ${getChoosenDeliveryDateString(deliveryOptionId)}`;
   })
 })
 
