@@ -16,8 +16,11 @@ import deliveryOptions from '../data/deliveryOptions.js';
 
 // console.log(deliveryDate.format('dddd, MMMM D'));
 
-let cartSummaryHTML = '';
-cart.forEach((cartItem) => {
+renderOrderSummary();
+
+function renderOrderSummary() {
+  let cartSummaryHTML = '';
+  cart.forEach((cartItem) => {
 
   const productId = cartItem.productId;
 
@@ -62,6 +65,10 @@ cart.forEach((cartItem) => {
   </div>
 </div>`;
 });
+
+document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
+
+}
 
 function getChoosenDeliveryDateString(deliveryOptionId) {
   let choosenDeliveryOption;
@@ -111,14 +118,12 @@ function generateDeliveryOptionsHTML(matchingProduct, cartItem) {
   return optionsHTML;
 }
 
-document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
-
 document.querySelectorAll('.js-delete-link').forEach(link => {
   link.addEventListener('click', () => {
     const productId = link.dataset.productId;
     removeFromCart(productId);
+
     const itemContainer = document.querySelector(`.js-cart-item-container-${productId}`);
-    console.log(itemContainer);
     itemContainer.remove();
   })
 })
@@ -132,4 +137,7 @@ document.querySelectorAll('.js-delivery-option').forEach(option => {
     document.querySelector(`.js-delivery-date-${productId}`).innerHTML = `Delivery date: ${getChoosenDeliveryDateString(deliveryOptionId)}`;
   })
 })
+
+
+
 
