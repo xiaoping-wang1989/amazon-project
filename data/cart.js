@@ -16,6 +16,15 @@ function saveToStorage() {
 function getFromStorage() {
   return JSON.parse(localStorage.getItem('cart'));
 }
+
+export function getCartQuantity() {
+  let cartQuantity = 0;
+  cart.forEach(cartItem => {
+    cartQuantity += cartItem.quantity;
+  })
+  return cartQuantity;
+}
+
 export function addToCart(productId, _quantity = 1) {
   let matchingItem;
 
