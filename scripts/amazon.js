@@ -1,6 +1,8 @@
 import {cart, addToCart, calculateCartQuantity} from '../data/cart.js';
 import {products} from '../data/products.js';
-import { formatCurrency } from './utils/money.js';
+import formatCurrency from './utils/money.js';
+
+updateCartQuantity();
 
 updateCartQuantity();
 
@@ -31,7 +33,7 @@ products.forEach((product, _index) => {
       </div>
 
       <div class="product-quantity-container">
-        <select>
+        <select class="js-quantity-selector-${product.id}">
           <option selected value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -47,7 +49,7 @@ products.forEach((product, _index) => {
 
       <div class="product-spacer"></div>
 
-      <div class="added-to-cart">
+      <div class="added-to-cart js-added-to-cart-${product.id}">
         <img src="images/icons/checkmark.png">
         Added
       </div>
@@ -60,13 +62,26 @@ products.forEach((product, _index) => {
 });
 
 document.querySelector('.products-grid').innerHTML = productsHTML;
-
+let addedMessageTimeOutId;
 document.querySelectorAll('.js-add-to-cart').forEach(button => {
   button.addEventListener('click', () => {
-    const productId = button.dataset.productId;
+    const { productId } = button.dataset;
+    const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
 
-    addToCart(productId);
-    console.log(cart);
+    addedMessage.classList.add('added-to-cart-visible');
+
+    if (addedMessageTimeOutId) {
+      clearTimeout(addedMessageTimeOutId);
+    } 
+    const timeOutId = setTimeout(() => {
+        addedMessage.classList.remove('added-to-cart-visible');
+    }, 2000);
+    addedMessageTimeOutId = timeOutId;
+
+    const selectorValue = document.querySelector(`.js-quantity-selector-${productId}`).value;
+    const quantity = Number(selectorValue);
+
+    addToCart(productId, quantity);
 
     updateCartQuantity();
   })
