@@ -1,4 +1,4 @@
-const products = [
+export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
     image: "images/products/athletic-cotton-socks-6-pairs.jpg",
@@ -658,3 +658,20 @@ const products = [
     ]
   }
 ];
+
+export function findProductByProductId(productId) {
+  /*
+  let matchingProduct;
+
+  products.forEach(product => {
+    if (product.id === productId) {
+      matchingProduct = product;
+    }
+  })
+  return matchingProduct;
+  */
+
+  const matchingProducts = products.filter(product => product.id === productId);
+
+  return matchingProducts.length > 0 ? matchingProducts[0] : null;
+}
