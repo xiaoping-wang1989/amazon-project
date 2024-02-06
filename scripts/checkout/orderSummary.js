@@ -110,6 +110,7 @@ export function renderOrderSummary() {
   
       updateQuantity(productId, inputValue);
 
+      renderCheckoutHeader();
       renderOrderSummary();
       renderPaymentSummary();
     })
