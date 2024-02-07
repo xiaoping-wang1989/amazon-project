@@ -17,7 +17,7 @@ export function renderOrderSummary() {
 
   const matchingProduct = findProductByProductId(productId);
 
-  cartSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
+  cartSummaryHTML += `<div class="cart-item-container js-cart-item-container js-cart-item-container-${matchingProduct.id}">
     <div class="js-delivery-date-${matchingProduct.id} delivery-date">
       Delivery date: ${calculateDeliveryDate(getDeliveryOption(cartItem.deliveryOptionId))}
     </div>
@@ -33,7 +33,7 @@ export function renderOrderSummary() {
         <div class="product-price">
           $${formatCurrency(matchingProduct.priceCents)}
         </div>
-        <div class="product-quantity">
+        <div class="product-quantity js-product-quantity-${matchingProduct.id}">
           <span>
           Quantity: <span class="js-quantity-label-${matchingProduct.id}" quantity-label">${cartItem.quantity}</span>
           </span>
@@ -42,7 +42,7 @@ export function renderOrderSummary() {
           </span>
           <input class="js-quantity-input-${matchingProduct.id} quantity-input">
           <span class="js-save-quantity-link save-quantity-link link-primary" data-product-id="${matchingProduct.id}">Save</span>
-          <span data-product-id="${matchingProduct.id}" class="js-delete-link delete-quantity-link link-primary">
+          <span data-product-id="${matchingProduct.id}" class="js-delete-link delete-quantity-link link-primary js-delete-link-${matchingProduct.id}">
             Delete
           </span>
         </div>
